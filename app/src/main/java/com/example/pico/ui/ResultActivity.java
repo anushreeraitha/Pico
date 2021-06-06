@@ -65,7 +65,6 @@ public class ResultActivity extends AppCompatActivity {
             outputStream = new FileOutputStream(outFile);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Oops...something went wrong", Toast.LENGTH_SHORT).show();
         }
 
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
@@ -73,7 +72,6 @@ public class ResultActivity extends AppCompatActivity {
             outputStream.flush();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Oops...something went wrong", Toast.LENGTH_SHORT).show();
         }
 
         try {
@@ -83,7 +81,6 @@ public class ResultActivity extends AppCompatActivity {
             Toast.makeText(this, "Hurry!! Photo is saved in your Gallery.", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Oops...something went wrong", Toast.LENGTH_SHORT).show();
         }
 
         binding.pbDownloading.setVisibility(View.GONE);
