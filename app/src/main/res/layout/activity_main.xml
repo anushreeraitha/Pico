@@ -69,8 +69,9 @@
         android:id="@+id/ib_btn_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/google_ads_card"
+        android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
+        android:layout_marginBottom="50dp"
         android:weightSum="10">
 
         <RelativeLayout
