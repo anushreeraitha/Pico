@@ -3,6 +3,7 @@ package com.example.pico.ui;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
@@ -26,6 +27,11 @@ import java.io.ByteArrayOutputStream;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private final String[] REQUIRED_PERMISSIONS = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+           };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +63,12 @@ public class MainActivity extends AppCompatActivity {
         binding.ivCameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(
+
+                if(!allPermissionsGranted()) {
+                    ActivityCompat.requestPermissions(MainActivity.this, REQUIRED_PERMISSIONS, Constants.REQUEST_CODE_PERMISSIONS);
+                /*if (ActivityCompat.checkSelfPermission(
                         MainActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        REQUIRED_PERMISSIONS)
                         != PackageManager.PERMISSION_GRANTED) {
 
                     ActivityCompat.requestPermissions(
@@ -75,13 +84,22 @@ public class MainActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(
                             MainActivity.this,
                             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            34);
+                            34);*/
                 } else {
                     Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraIntent, Constants.CAMERA_REQUEST_CODE);
                 }
             }
         });
+    }
+
+    private boolean allPermissionsGranted() {
+        for (String permission : REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
