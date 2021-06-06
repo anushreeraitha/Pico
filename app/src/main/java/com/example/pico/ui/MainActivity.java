@@ -127,13 +127,17 @@ public class MainActivity extends AppCompatActivity {
 
         if(data != null) {
             if (requestCode == Constants.CAMERA_REQUEST_CODE) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                Uri uri = getImageUri(photo);
+                if (data.getExtras() != null) {
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    Uri uri = getImageUri(photo);
 
-                CropImage.activity(uri)
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setMultiTouchEnabled(true)
-                        .start(this);
+                    CropImage.activity(uri)
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            .setMultiTouchEnabled(true)
+                            .start(this);
+                }
+            } else {
+                onResume();
             }
         }
     }

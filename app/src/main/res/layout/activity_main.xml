@@ -8,11 +8,6 @@
     tools:context=".ui.MainActivity">
 
     <RelativeLayout
-        android:id="@+id/Container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <RelativeLayout
         android:id="@+id/tv_pico_name_lay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,6 +47,11 @@
         android:elevation="3dp"
         app:cardCornerRadius="10dp">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/welcome_image"/>
+
         <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"
             android:layout_width="wrap_content"
@@ -71,7 +71,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
-        android:layout_marginBottom="50dp"
         android:weightSum="10">
 
         <RelativeLayout
