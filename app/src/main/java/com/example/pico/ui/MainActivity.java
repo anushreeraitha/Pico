@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+
 import com.example.pico.databinding.ActivityMainBinding;
 import com.example.pico.util.Constants;
 import com.google.android.gms.ads.AdRequest;
@@ -24,14 +25,21 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 
+/**
+ * Home activity of Pico app.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+
+    /**
+     * User-permission request
+     */
     private final String[] REQUIRED_PERMISSIONS = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE
-           };
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +48,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         getSupportActionBar().hide();
 
+        /**
+         * Initialize google ads
+         */
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
 
-        AdRequest adRequest = new AdRequest.Builder().build();
-        binding.adView.loadAd(adRequest);
+        AdRequest adRequest = new AdRequest.Builder().build(); //request for ads
+        binding.adView.loadAd(adRequest);                      //load ads for view
 
-
+        /**
+         * Open gallery to choose photo
+         */
         binding.ivEditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,31 +73,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Open Camera to take photo
+         */
         binding.ivCameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(!allPermissionsGranted()) {
+                if (!allPermissionsGranted()) {
                     ActivityCompat.requestPermissions(MainActivity.this, REQUIRED_PERMISSIONS, Constants.REQUEST_CODE_PERMISSIONS);
-                /*if (ActivityCompat.checkSelfPermission(
-                        MainActivity.this,
-                        REQUIRED_PERMISSIONS)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    ActivityCompat.requestPermissions(
-                            MainActivity.this,
-                            new String[]{Manifest.permission.CAMERA},
-                            32);
-
-                    ActivityCompat.requestPermissions(
-                            MainActivity.this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            33);
-
-                    ActivityCompat.requestPermissions(
-                            MainActivity.this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            34);*/
                 } else {
                     Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraIntent, Constants.CAMERA_REQUEST_CODE);
@@ -93,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Get user-permission for camera and storage
+     */
     private boolean allPermissionsGranted() {
         for (String permission : REQUIRED_PERMISSIONS) {
             if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
@@ -105,7 +105,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data != null) {
+        /**
+         * CropActivity is opened for editing photo chosen from gallery.
+         * 'com.theartofdev.edmodo:android-image-cropper:2.4.+' lib is used for the purpose
+         */
+        if (data != null) {
             if (requestCode == Constants.IMAGE_REQUEST_CODE) {
                 if (data.getData() != null) {
                     CropImage.activity(data.getData())
@@ -116,16 +120,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        /**
+         * The resultant photo is sent to ResultActivity.
+         */
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-           CropImage.ActivityResult result = CropImage.getActivityResult(data);
-           if(resultCode == RESULT_OK) {
-               Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-               intent.setData(result.getUri());
-               startActivity(intent);
-           }
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                intent.setData(result.getUri());
+                startActivity(intent);
+            }
         }
 
-        if(data != null) {
+        /**
+         * CropActivity is opened for editing photo taken from camera.
+         * 'com.theartofdev.edmodo:android-image-cropper:2.4.+' lib is used for the purpose
+         */
+        if (data != null) {
             if (requestCode == Constants.CAMERA_REQUEST_CODE) {
                 if (data.getExtras() != null) {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
@@ -142,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Convert bitmat to uri image.
+     */
     public Uri getImageUri(Bitmap bitmap) {
         ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, arrayOutputStream);

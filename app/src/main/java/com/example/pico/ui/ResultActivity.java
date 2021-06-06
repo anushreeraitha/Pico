@@ -17,6 +17,11 @@ import com.google.android.gms.ads.AdRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 
+/**
+ * ResultActivity shows the edited photo with save option.
+ * It is also incorporated with google ad banner.
+ */
+
 public class ResultActivity extends AppCompatActivity {
 
     private ActivityResultBinding binding;
@@ -47,6 +52,9 @@ public class ResultActivity extends AppCompatActivity {
         binding.adView.loadAd(adRequest);
     }
 
+    /**
+     * Saving the edited photos to Gallery.
+     */
     private void saveToGallery() {
         binding.pbDownloading.setVisibility(View.VISIBLE);
         BitmapDrawable bitmapDrawable = (BitmapDrawable) binding.ivEditedPhoto.getDrawable();

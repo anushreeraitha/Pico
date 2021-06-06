@@ -6,6 +6,9 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
+    /**
+     * Allows the binding of xml to activity or fragment
+     */
     buildFeatures {
         viewBinding true
     }
@@ -43,6 +46,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation 'com.google.android.gms:play-services-ads:20.1.0'
+
+    //CropActivity lib
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.4.+'
 
 }
